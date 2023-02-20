@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "556240807208",
+    "firebase_url": "https://boletaproto2.firebaseio.com",
+    "project_id": "boletaproto2",
+    "storage_bucket": "boletaproto2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556240807208:android:5decb6191e41e8dd375c1d",
+        "android_client_info": {
+          "package_name": "com.uabc.boletaProtoNew2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "556240807208-lddmf1e53p7ipte66u44tku0tu16llh5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uabc.boletaProtoNew2",
+            "certificate_hash": "c15fffebdcbd7e2bd85b9b53b378da52a2a7442c"
+          }
+        },
+        {
+          "client_id": "556240807208-oaniepl05ndt48spo099rt9br70j8fef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uabc.boletaProtoNew2",
+            "certificate_hash": "abc0f9372be163e2d66c29a141d1abeb7df7ed5f"
+          }
+        },
+        {
+          "client_id": "556240807208-mtao84k6qo3s9jf9e0r6ggs7nh0mgdqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLqjTACWz7-6frGdygceGon2LCyBdvcss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "556240807208-mtao84k6qo3s9jf9e0r6ggs7nh0mgdqr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "556240807208-346tcp630vudm7pjrsri8k5350ohi7rs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mx.uabc.alumnos"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

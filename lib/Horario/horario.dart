@@ -367,6 +367,7 @@ class WeekViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /******************* TAKE LOCAL HOUR NOTIFICATION *****************************/
+
     DateTime dateNow = DateTime.now();
     String timer = "${dateNow.hour}:${dateNow.minute + 1}";
     print("timer >> $timer");
@@ -893,6 +894,8 @@ class JsonEvents {
     for (materiaHorario materia in listaMaterias) {
       //navega por la lista de asignaturas
       for (dias diaMateria in materia.listDias) {
+        print(
+            "HORAAAAAAAAAAAAAAAAAAAAAAAA ${materia.desc_activ} ${diaMateria.hora_inicial} - ${diaMateria.hora_final}");
         //int i = 0;
         //crea eventos en base al dia
         //while (i < diaMateria.dias.length) {
@@ -927,45 +930,7 @@ class JsonEvents {
                 ),
             color: eventColor);
         _events.add(eventData);
-        //}
-        /*   i++;
-        }
-      */
       }
-      /* //lo mismo pero para actividades
-      for (activdades actividad in materia.listActividades) {
-        int i = 0;
-        //crea eventos en base al dia
-        while (i < actividad.dias.length) {
-          if (actividad.dias[i] == "1") {
-            //Create event
-            CalendarEventData eventData = CalendarEventData(
-                title: actividad.descripcionActividad.trim(),
-                date: weekdays[i],
-                description:
-                    "Horario: ${actividad.horaEntrada} - ${actividad.horaSalida}",
-                startTime: DateTime(
-                    weekdays[i].year,
-                    weekdays[i].month,
-                    weekdays[i].day,
-                    int.parse(actividad.horaEntrada.split(':')[0]), //horaInicio
-                    int.parse(
-                        actividad.horaEntrada.split(':')[1]) //minutosInicio
-                    ),
-                endTime: DateTime(
-                    weekdays[i].year,
-                    weekdays[i].month,
-                    weekdays[i].day,
-                    int.parse(actividad.horaSalida.split(':')[0]), //horaInicio
-                    int.parse(
-                        actividad.horaSalida.split(':')[1]) //minutosInicio
-                    ),
-                color: Colors.grey.shade500);
-            _events.add(eventData);
-          }
-          i++;
-        }
-      }*/
     }
     //opCode = "${listaUnidades.length}" as Future<String>;
     return Future.value(_events);
