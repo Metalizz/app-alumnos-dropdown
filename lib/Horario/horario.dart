@@ -76,21 +76,32 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
-
+var horita;
+ dynamic este;
+   var diasemana;
+  String timer="";
 /**************************/
 //Calcula el tiempo (Notificaciones)
 int calculateRemainTimeInSeconds(String horaInicial) {
   DateTime _now = DateTime.now();
   int _nowInSeconds = _now.hour * 3600 + _now.minute * 60 + _now.second;
   //segundos sumados
-  List<String> untilTime = horaInicial.split(":");
+  //List<String> untilTime = horaInicial.split(":");
 
-  int hour = int.parse(untilTime[0]);
-  int minute = int.parse(untilTime[1]);
-
-  print("**********************HORA/MINUTO*************************");
+  int hour = _now.hour; //= int.parse(untilTime[0]);
+  int minute = _now.minute; //= int.parse(untilTime[1]);
+  horita = '$hour:$minute';
+ print("**********************HORA/MINUTO*************************");
   print("THIS IS HOUR >> $hour");
   print("THIS IS MINUTES >> $minute");
+  if(_now.weekday == 0){
+    diasemana="Lunes";
+  }
+   if(_now.weekday == 5){
+    diasemana="Viernes";
+  }
+  print(diasemana);
+ 
   int _thenInSeconds = hour * 3600 + minute * 60;
   return _thenInSeconds - _nowInSeconds;
 }
@@ -204,7 +215,8 @@ class _DayViewScreen extends State<DayViewScreen> {
 
     /******************* TAKE LOCAL HOUR NOTIFICATION **************************/
     DateTime dateNow = DateTime.now();
-    String timer = "${dateNow.hour}:${dateNow.minute + 1}";
+  
+     timer ="${dateNow.hour}:${dateNow.minute.toString().padLeft(2, '0')}";
     print("timer >> $timer");
     int valor = calculateRemainTimeInSeconds(timer);
     print("valor >> $valor");
@@ -248,11 +260,14 @@ class _DayViewScreen extends State<DayViewScreen> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 onPressed: () {
+                   print(horita==este);
+                  if( horita == este ){
                   Workmanager().registerOneOffTask(
                     "1",
                     "notify_15_minutes_before_hour",
                     initialDelay: Duration(seconds: valor),
                   );
+                  }
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -362,14 +377,14 @@ class _WeekdayHeader extends State {
 //     );
 //   }
 // }
-
+var si;
 class WeekViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /******************* TAKE LOCAL HOUR NOTIFICATION *****************************/
 
     DateTime dateNow = DateTime.now();
-    String timer = "${dateNow.hour}:${dateNow.minute + 1}";
+    timer ="${dateNow.hour}:${dateNow.minute.toString().padLeft(2, '0')}";
     print("timer >> $timer");
     int valor = calculateRemainTimeInSeconds(timer);
     print("valor >> $valor");
@@ -598,9 +613,36 @@ class JsonEvents {
           List<dynamic> jsonMap = jsonOutput['materias'];
           for (var element in jsonMap) {
             materiaHorario materia = materiaHorario.fromJson(element);
-            listaMaterias.add(materia);
+            listaMaterias.add(materia); 
           }
         }
+////////////////COMPARACIONES Y NOTIFICACION
+
+         for (materiaHorario materia in listaMaterias) {
+      //navega por la lista de asignaturas
+      for (dias diaMateria in materia.listDias) {
+           print("DIA SEMANA CEL${diasemana}");
+          print("DIA SEMANA JSON${diaMateria.dia}");
+          print("hora cel ${timer}");
+          print("HORA JSON${diaMateria.hora_inicial}");
+         if(diasemana== diaMateria.dia && timer == diaMateria.hora_inicial){
+
+            print("ES CORRECTOOOO!!!");
+            Workmanager().registerOneOffTask(
+                    "1",
+                    "notify_15_minutes_before_hour",
+                    initialDelay: Duration(seconds: 5),
+                  );      
+          }
+          else{
+            print("NO ES CORRECTO U.U");
+          }
+       // print("diaMateria${diaMateria.dia}");
+      /*  este= diaMateria.hora_inicial;
+        print(
+            "AQUIIII ${este}");**/
+      }
+}
         //});
       } else if (response.statusCode == 400) {
         AlertDialog alert = AlertDialog(
