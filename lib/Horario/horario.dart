@@ -57,7 +57,7 @@ const simpleTaskKey = "be.tramckrijte.workmanagerExample.simpleTask";
 @pragma(
     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
-  var initializationSettingsAndroid =
+  /*var initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
   var initializationSettings =
@@ -70,7 +70,7 @@ void callbackDispatcher() {
   flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
   );
-
+*/
   Workmanager().executeTask((task, inputData) async {
     showNotification();
     return Future.value(true);
@@ -80,6 +80,9 @@ var horita;
  dynamic este;
    var diasemana;
   String timer="";
+  var ejemplo;
+   Set<materiaHorario> listaMaterias = Set();
+
 /**************************/
 //Calcula el tiempo (Notificaciones)
 int calculateRemainTimeInSeconds(String horaInicial) {
@@ -94,12 +97,25 @@ int calculateRemainTimeInSeconds(String horaInicial) {
  print("**********************HORA/MINUTO*************************");
   print("THIS IS HOUR >> $hour");
   print("THIS IS MINUTES >> $minute");
-  if(_now.weekday == 0){
+  if(_now.weekday == 1){
     diasemana="Lunes";
+  }
+  if(_now.weekday == 2){
+    diasemana="Martes";
+  }
+  if(_now.weekday == 3){
+    diasemana="Miercoles";
+  }
+  if(_now.weekday == 4){
+    diasemana="Jueves";
   }
    if(_now.weekday == 5){
     diasemana="Viernes";
   }
+  if(_now.weekday == 6){
+    diasemana="Sabado";
+  }
+  
   print(diasemana);
  
   int _thenInSeconds = hour * 3600 + minute * 60;
@@ -161,9 +177,11 @@ class _DayViewScreen extends State<DayViewScreen> {
   @override
   void initState() {
     super.initState();
+ 
     //eventData = await JsonEvents.loadData();
     JsonEvents.initData();
     getEvents();
+
   }
 
   void getEvents() async {
@@ -205,7 +223,44 @@ class _DayViewScreen extends State<DayViewScreen> {
     state?.updateHeader();
     return currentDay;
   }
+funcion(){
+  for (materiaHorario materia in listaMaterias) {
+      //navega por la lista de asignaturas
+      for (dias diaMateria in materia.listDias) {
+           print("DIA SEMANA CEL${diasemana}");
+          print("DIA SEMANA JSON${diaMateria.dia}");
+          print("hora cel ${timer}");
+          print("HORA JSON${diaMateria.hora_inicial}");
+            print("MINUTOOOOS: ${diaMateria.hora_inicial.split(":")[1]}");
+          var minutosjson= diaMateria.hora_inicial.split(":")[1];
+          print(minutosjson);
+          if(minutosjson=="00"){
+            minutosjson="45";
+          } else if(minutosjson=="30"){
+            minutosjson="15";
+          }
+         print(minutosjson);
+         var minutosjson2= (int.parse(diaMateria.hora_inicial.split(":")[0])-1);
+          print(minutosjson2.toString().padLeft(2, '0'));
+          //print("${minutosjson2}:${minutosjson}");
+          var aqui= "${minutosjson2.toString().padLeft(2, '0')}:${minutosjson}";
+          print(aqui);
+         if(diasemana== diaMateria.dia && timer == aqui){
 
+            print("ES CORRECTOOOO!!!");
+            Workmanager().registerOneOffTask(
+                    "1",
+                    "notify_15_minutes_before_hour",
+                    initialDelay: Duration(seconds: 3),
+                  );      
+          }
+          else{
+            print("NO ES CORRECTO U.U");
+          }
+    
+      }
+}
+}
   @override
   Widget build(BuildContext context) {
     //post frame callback is called ONCE after it's done building
@@ -216,7 +271,7 @@ class _DayViewScreen extends State<DayViewScreen> {
     /******************* TAKE LOCAL HOUR NOTIFICATION **************************/
     DateTime dateNow = DateTime.now();
   
-     timer ="${dateNow.hour}:${dateNow.minute.toString().padLeft(2, '0')}";
+     timer ="${dateNow.hour.toString().padLeft(2, '0')}:${dateNow.minute.toString().padLeft(2, '0')}";
     print("timer >> $timer");
     int valor = calculateRemainTimeInSeconds(timer);
     print("valor >> $valor");
@@ -260,14 +315,52 @@ class _DayViewScreen extends State<DayViewScreen> {
               alignment: Alignment.bottomCenter,
               child: ElevatedButton(
                 onPressed: () {
-                   print(horita==este);
+                  print("BOTON UNO");
+                  
+                   for (materiaHorario materia in listaMaterias) {
+      //navega por la lista de asignaturas
+      for (dias diaMateria in materia.listDias) {
+           print("DIA SEMANA CEL${diasemana}");
+          print("DIA SEMANA JSON${diaMateria.dia}");
+          print("hora cel ${timer}");
+          print("HORA JSON${diaMateria.hora_inicial}");
+            print("MINUTOOOOS: ${diaMateria.hora_inicial.split(":")[1]}");
+          var minutosjson= diaMateria.hora_inicial.split(":")[1];
+          print(minutosjson);
+          if(minutosjson=="00"){
+            minutosjson="45";
+          } else if(minutosjson=="30"){
+            minutosjson="15";
+          }
+         print(minutosjson);
+         var minutosjson2= (int.parse(diaMateria.hora_inicial.split(":")[0])-1);
+          print(minutosjson2.toString().padLeft(2, '0'));
+          //print("${minutosjson2}:${minutosjson}");
+          var aqui= "${minutosjson2.toString().padLeft(2, '0')}:${minutosjson}";
+          print(aqui);
+         if(diasemana== diaMateria.dia && timer == aqui){
+
+            print("ES CORRECTOOOO!!!");
+            Workmanager().registerPeriodicTask(
+                    "1",
+                    "notify_15_minutes_before_hour",
+                    initialDelay: Duration(seconds: 3),
+                  );      
+          }
+          else{
+            print("NO ES CORRECTO U.U");
+          }
+    
+      }
+}
+                  /* print(horita==este);
                   if( horita == este ){
                   Workmanager().registerOneOffTask(
                     "1",
                     "notify_15_minutes_before_hour",
                     initialDelay: Duration(seconds: valor),
                   );
-                  }
+                  }*/
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -384,7 +477,8 @@ class WeekViewScreen extends StatelessWidget {
     /******************* TAKE LOCAL HOUR NOTIFICATION *****************************/
 
     DateTime dateNow = DateTime.now();
-    timer ="${dateNow.hour}:${dateNow.minute.toString().padLeft(2, '0')}";
+    timer ="${dateNow.hour.toString().padLeft(2, '0')}:${dateNow.minute.toString().padLeft(2, '0')}";
+  
     print("timer >> $timer");
     int valor = calculateRemainTimeInSeconds(timer);
     print("valor >> $valor");
@@ -439,11 +533,48 @@ class WeekViewScreen extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: ElevatedButton(
                   onPressed: () {
-                    Workmanager().registerOneOffTask(
+                  print("BOTON DOS");
+             for (materiaHorario materia in listaMaterias) {
+      //navega por la lista de asignaturas
+      for (dias diaMateria in materia.listDias) {
+           print("DIA SEMANA CEL${diasemana}");
+          print("DIA SEMANA JSON${diaMateria.dia}");
+          print("hora cel ${timer}");
+          print("HORA JSON${diaMateria.hora_inicial}");
+            print("MINUTOOOOS: ${diaMateria.hora_inicial.split(":")[1]}");
+          var minutosjson= diaMateria.hora_inicial.split(":")[1];
+          print(minutosjson);
+          if(minutosjson=="00"){
+            minutosjson="45";
+          } else if(minutosjson=="30"){
+            minutosjson="15";
+          }
+         print(minutosjson);
+         var minutosjson2= (int.parse(diaMateria.hora_inicial.split(":")[0])-1);
+          print(minutosjson2.toString().padLeft(2, '0'));
+          //print("${minutosjson2}:${minutosjson}");
+          var aqui= "${minutosjson2.toString().padLeft(2, '0')}:${minutosjson}";
+          print(aqui);
+         if(diasemana== diaMateria.dia && timer == aqui){
+
+            print("ES CORRECTOOOO!!!");
+            Workmanager().registerOneOffTask(
+                    "1",
+                    "notify_15_minutes_before_hour",
+                    initialDelay: Duration(seconds: 3),
+                  );      
+          }
+          else{
+            print("NO ES CORRECTO U.U");
+          }
+    
+      }
+}
+                    /*Workmanager().registerOneOffTask(
                       "1",
                       "notify_15_minutes_before_hour",
                       initialDelay: Duration(seconds: valor),
-                    );
+                    );*/
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -559,7 +690,7 @@ class JsonEvents {
   static final GoogleSignIn _googleSignIn = GoogleSignIn();
   static bool isValid = false;
   static String invalidMssg = "";
-  static Set<materiaHorario> listaMaterias = Set();
+ // static Set<materiaHorario> listaMaterias = Set();
   static List<CalendarEventData> _events = [];
 
   static void initData() {
@@ -616,9 +747,11 @@ class JsonEvents {
             listaMaterias.add(materia); 
           }
         }
+ejemplo = jsonOutput;
+        print(jsonOutput);
 ////////////////COMPARACIONES Y NOTIFICACION
 
-         for (materiaHorario materia in listaMaterias) {
+       /*  for (materiaHorario materia in listaMaterias) {
       //navega por la lista de asignaturas
       for (dias diaMateria in materia.listDias) {
            print("DIA SEMANA CEL${diasemana}");
@@ -637,12 +770,9 @@ class JsonEvents {
           else{
             print("NO ES CORRECTO U.U");
           }
-       // print("diaMateria${diaMateria.dia}");
-      /*  este= diaMateria.hora_inicial;
-        print(
-            "AQUIIII ${este}");**/
+    
       }
-}
+}*/
         //});
       } else if (response.statusCode == 400) {
         AlertDialog alert = AlertDialog(

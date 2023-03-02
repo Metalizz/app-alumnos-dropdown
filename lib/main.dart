@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:boletaproto2new/Subasta/subastaEstate.dart';
 import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
+import 'package:workmanager/workmanager.dart';
+
+import 'Horario/horario.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    Workmanager().initialize(callbackDispatcher);
+
   await Firebase.initializeApp();
   runApp(const MyApp());
 }
