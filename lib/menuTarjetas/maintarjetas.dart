@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         "/subasta": (BuildContext constext) => const subasta(),
       },
 
-      home: const MyHomePage(title: "Aplicacion Alumnos"),
+      home:  MyHomePage(title: "Aplicacion Alumnos",storage: CounterStorage()),
     );
   }
 }

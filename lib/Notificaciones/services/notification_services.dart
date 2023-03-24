@@ -1,4 +1,4 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+/*import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -34,3 +34,4 @@ Future<void> showNotificacion() async {
   await flutterLocalNotificationsPlugin.show(1, 'Titulo de notificacion',
       'Esta es una notificación de prueba para mostrar', notificationDetails);
 }
+*/

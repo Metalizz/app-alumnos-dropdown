@@ -8,10 +8,51 @@ import 'package:boletaproto2new/menuTarjetas/var.dart';
 
 import '../utils/variablesGlobales.dart';
 
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+class CounterStorage {
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<int> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return int.parse(contents);
+    } catch (e) {
+      // If encountering an error, return 0
+      return 0;
+    }
+  }
+
+  Future<File> writeCounter(int num) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString('$num');
+  }
+}
+
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+const MyHomePage({super.key, required this.storage, required this.title});
 
   final String title;
+  final CounterStorage storage;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -23,13 +64,31 @@ class _MyHomePageState extends State<MyHomePage> {
   double cardH = 0;
   double cardW = 0;
   double ratio = 0;
-  @override
-  void initState() {
-    super.initState();
-    expedienteP = PEducativos[0]['expediente'];
-    print(expedienteP);
-  }
+  int num = 0;
 
+  @override
+ void initState() {
+    super.initState();
+        widget.storage.readCounter().then((value) {
+      setState(() {
+        num = value;
+      });
+    });
+   expedienteP= PEducativos[0]['expediente'];
+   print(expedienteP);
+  }
+ Future<File> _incrementCounter() {
+    setState(() {
+       if(num<4) {
+        num++;
+      }else{
+      num=0;
+      }
+    });
+
+    // Write the variable as a string to the file.
+    return widget.storage.writeCounter(num);
+  }
   @override
   Widget build(BuildContext context) {
     ratio = _setSize(context);
@@ -38,22 +97,33 @@ class _MyHomePageState extends State<MyHomePage> {
         primarySwatch: Colors.green, //color de fondo barra de menu
       ),
       home: Scaffold(
-          appBar: AppBar(
+               appBar: AppBar(
             title: Text(widget.title),
           ),
 
           //backgroundColor: Colors.green[200],//Fondo de pantalla
           drawer: Menulateral(),
-          body: Container(
+          body: 
+          /*Container(
             height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
+            width: MediaQuery.of(context).size.width,*/
+              Stack(alignment: Alignment.bottomRight, 
+      children: <Widget>[
+               InkWell(
+       // onTap: incrementCounter,
+          
+        child: Image.asset('assets/images/fondouabc${num}.png',
+     fit: BoxFit.fitWidth,),
+        
+      ),
+           /* decoration: const BoxDecoration(
               color: Color.fromARGB(255, 250, 246, 246),
               image: const DecorationImage(
                   image: const AssetImage("assets/images/fondouabc.png"),
                   fit: BoxFit.contain,
                   alignment: Alignment.centerRight),
-            ),
+            ),*/
+Padding(
             padding: const EdgeInsets.all(30.0),
             child: AspectRatio(
                 aspectRatio: ratio,
@@ -63,43 +133,38 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
+                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         DropdownButton(
-                          // icon: const Icon(Icons.arrow_downward),
+                        // icon: const Icon(Icons.arrow_downward),
                           elevation: 16,
-                          style: const TextStyle(
-                              color: Color.fromARGB(255, 7, 7, 7)),
+                          style: const TextStyle(color: Color.fromARGB(255, 7, 7, 7)),
                           underline: Container(
                             height: 2,
                             color: Color.fromARGB(255, 1, 116, 16),
                           ),
-                          hint: Text(
-                            estado,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          items: PEducativos.map((item) {
-                            print(item);
-                            return DropdownMenuItem(
-                              value: item,
-                              child: Text("${item['programaEducativo']} "),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              dropdownvalue = newVal;
-                              expedienteP = dropdownvalue['expediente'];
-                              carreraAlumno =
-                                  dropdownvalue['programaEducativo'];
-                            });
-                          },
-                          value: dropdownvalue,
-                        ),
+                          hint: Text(estado, style: TextStyle(color: Colors.black),),
+                            items: PEducativos.map((item) {
+                              print(item);
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Text("${item['programaEducativo']} "),        
+                              );
+                            }).toList(),
+                            onChanged: (newVal) {
+                              setState(() {
+                                dropdownvalue = newVal;
+                                expedienteP = dropdownvalue['expediente'];
+                                carreraAlumno =dropdownvalue['programaEducativo'];
+                              });
+                            },
+                           value:dropdownvalue,
+                          ), 
                       ],
                     ),
-
+                
                     //Primer renglon
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     //Segundo renglon
-                    /*   Row(
+                 /*   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -126,9 +191,39 @@ class _MyHomePageState extends State<MyHomePage> {
                         )
                       ],
                     )*/
+                    Container(
+                  padding: const EdgeInsets.all(15),
+                  margin: const EdgeInsets.only(left: 40, top: 120),
+                  width: 200,
+                  height: 200,
+                  alignment: Alignment.bottomRight,
+                  child:TextButton(
+                  onPressed: _incrementCounter,
+                  child: Container( 
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(18),
+                    child: Text(' '),
+                  ),
+                ),
+)
+                   /*  Padding(
+                padding: EdgeInsets.all(8.0),
+                child: TextButton(
+                  onPressed: incrementCounter,
+                  child: Container(
+                    width: 150,
+                    height: 180,
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(18),
+                  
+                    child: Text('Cambiar Aqui'),
+                  ),
+                ),
+              ),*/
                   ],
                 ))),
-          )),
+          )]),
+    ),
     );
   }
 

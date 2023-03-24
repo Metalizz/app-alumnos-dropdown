@@ -8,26 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:556240807208:android:5decb6191e41e8dd375c1d",
+        "mobilesdk_app_id": "1:556240807208:android:be5f990953e3479a375c1d",
         "android_client_info": {
-          "package_name": "com.uabc.boletaProtoNew2"
+          "package_name": "com.uabc.boletaProto2New"
         }
       },
       "oauth_client": [
         {
-          "client_id": "556240807208-lddmf1e53p7ipte66u44tku0tu16llh5.apps.googleusercontent.com",
+          "client_id": "556240807208-khi2f17ihfs79akpqia7dalpqg4gtvp2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.uabc.boletaProtoNew2",
-            "certificate_hash": "c15fffebdcbd7e2bd85b9b53b378da52a2a7442c"
-          }
-        },
-        {
-          "client_id": "556240807208-oaniepl05ndt48spo099rt9br70j8fef.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.uabc.boletaProtoNew2",
-            "certificate_hash": "abc0f9372be163e2d66c29a141d1abeb7df7ed5f"
+            "package_name": "com.uabc.boletaProto2New",
+            "certificate_hash": "776a91b46a90ec319b427462dda8f2db4ca40405"
           }
         },
         {
@@ -48,10 +40,11 @@
               "client_type": 3
             },
             {
-              "client_id": "556240807208-346tcp630vudm7pjrsri8k5350ohi7rs.apps.googleusercontent.com",
+              "client_id": "556240807208-2hfpr4odhbkbgp5gcggjp517iu6q904i.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "mx.uabc.alumnos"
+                "bundle_id": "mx.uabc.alumnos",
+                "app_store_id": "1493233670"
               }
             }
           ]
